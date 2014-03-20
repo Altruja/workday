@@ -6,19 +6,30 @@ namespace Altruja;
  * A simple utility class to find the next workday from a date
  */
 
-class Workday {
+class Workday extends DateTime {
 
   public $date, $region, $strict;
 
   public function __construct(\DateTime $date, $region = 'Germany', $strict = true) {
-    $this->date = clone $date;
+    $this->date = $date;
     $this->region = $region;
     $this->strict = $strict;
   }
 
-  public function next() {
+  public function next($num = null) {
+    
+    // Move to next workday, or present day if already is workday
     while ($this->isWeekend() || $this->isHoliday()) {
       $this->date->add(new \DateInterval("P1D"));
+    }
+
+    // Add a number of days if applicable, always moving to the next work day
+    // In effect this adds a number of business days
+    if ($num !== null) {
+      for ($i = 0; $i < $num; $i++) {
+        $this->date->add(new \DateInterval("P1D"));
+        $this->next();
+      }
     }
     return $this->date;
   }
