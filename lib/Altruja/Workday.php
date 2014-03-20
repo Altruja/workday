@@ -4,6 +4,7 @@ namespace Altruja;
 
 /**
  * A simple utility class to find the next workday from a date
+ * @author Carlo Capocasa <carlo.capocasa@altruja.de>
  */
 
 class Workday {
