@@ -4,7 +4,6 @@ namespace Altruja;
 
 /**
  * A simple utility class to find the next workday from a date
- * @author Carlo Capocasa <carlo.capocasa@altruja.de>
  */
 
 class Workday {
@@ -15,6 +14,11 @@ class Workday {
     $this->date = $date;
     $this->region = $region;
     $this->strict = $strict;
+    $class = "\\Holiday\\$this->region";
+    if (false == class_exists($class)) {
+      throw new \Exception("Region \"$this->region\" not available, please write one");
+    }
+    $this->holiday = new $class();
   }
 
   public function next($num = null) {
@@ -40,12 +44,7 @@ class Workday {
   }
 
   public function isHoliday() {
-    $class = "\\Holiday\\$this->region";
-    if (false == class_exists($class)) {
-      throw new \Exception("Region \"$this->region\" not available, please write one");
-    }
-    $calc = new $class();
-    $holidays = $calc->between($this->date, $this->date);
+    $holidays = $this->holiday->between($this->date, $this->date);
     $holiday = reset($holidays);
     $isHoliday = $holiday && ($holiday->type == \Holiday\HOLIDAY || ($this->strict == false && $holiday->type == \Holiday\NOTABLE));
     return $isHoliday;
