@@ -6,7 +6,7 @@ namespace Altruja;
  * A simple utility class to find the next workday from a date
  */
 
-class Workday extends DateTime {
+class Workday {
 
   public $date, $region, $strict;
 
