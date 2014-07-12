@@ -21,19 +21,29 @@ class Workday {
     $this->holiday = new $class();
   }
 
-  public function next($num = null) {
-    
-    // Move to next workday, or present day if already is workday
+  public function next($num = null)
+  {
+    $this->step('+1 day', $num);
+  }
+
+  public function previous($num = null)
+  {
+    $this->step('-1 day', $num);
+  }
+
+  private function step($direction, $num = null)
+  {
+    // Move to next/previous workday, or present day if already is workday
     while ($this->isWeekend() || $this->isHoliday()) {
-      $this->date->add(new \DateInterval("P1D"));
+      $this->date->modify($direction);
     }
 
-    // Add a number of days if applicable, always moving to the next work day
+    // Add a number of days if applicable, always moving to the next/previous work day
     // In effect this adds a number of business days
     if ($num !== null) {
       for ($i = 0; $i < $num; $i++) {
-        $this->date->add(new \DateInterval("P1D"));
-        $this->next();
+        $this->date->modify($direction);
+        $this->step($direction);
       }
     }
     return $this->date;
