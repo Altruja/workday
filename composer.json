@@ -2,7 +2,7 @@
   "name": "altruja/workday", 
   "require": { 
     "php": ">=5.3.0", 
-    "mayflower/holiday": "~0.5"
+    "mayflower/holiday": "dev-master"
   },
   "autoload": { 
     "psr-0": {
